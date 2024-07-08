@@ -98,3 +98,89 @@ txt
 
 ##--------------------------
 
+T = int(input())
+output = ""
+
+for t in range(T) :
+    R, S = map(str, input().split())
+    R = int(R)
+    S = list(S)
+    
+    for j in range(len(S)) :
+        output = output + S[j]*R
+        
+    output = output + "\n"
+
+print(output[:-1])
+
+##----------------
+
+print(ord(input()))
+
+##----------------
+
+T = int(input())
+for t in range(T) :
+    H, W, N = map(int, input().split())
+    
+    if N%H == 0 :
+        numb = N//H
+        flr = H
+        
+    else :
+        numb = N//H + 1
+        flr = N%H
+    
+    if numb < 10 :
+        print(int(str(flr)+"0"+str(numb)))
+    else :
+        print(int(str(flr)+str(numb)))
+        
+        
+##----------------
+
+values = list(map(int, input().split()))
+
+asc = False
+des = False
+
+if 1 == values[0] :
+    for i in range(7) :
+        asc = True
+        if i+2 != values[i+1] :
+            asc = False
+            print("mixed")
+            break
+        
+    if asc :
+        print("ascending")
+        
+elif 8 == values[0] :
+    for i in range(7) :
+        des = True
+        if 7-i != values[i+1] :
+            des = False
+            print("mixed")
+            break
+        
+    if des :
+        print("descending")
+        
+        
+##------------------
+
+N = int(input())
+
+for n in range(N) :
+    lst = list(str(input()))
+    score = 0
+    conti = 0
+    
+    for i in range(len(lst)) :
+        if lst[i] == "O" :
+            score += 1 + conti
+            conti += 1
+        else :
+            conti = 0
+    
+    print(score)
