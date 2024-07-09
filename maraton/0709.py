@@ -29,7 +29,7 @@ print("\n".join(map(str, results)))
 ##--------------------------------
 
 from sys import stdin
-from math import pi, exp, log
+from math import pi, exp, log, comb
 
 def norm_pdf(x, mu, sigma_sq) :
     return 1/(2*pi*sigma_sq)**0.5*exp(-(x-mu)**2/(2*sigma_sq))
@@ -43,19 +43,7 @@ lst = [[0]*2]*Q
 for i in range(Q) :
     lst[i] = list(map(int, stdin.readline().split()))
 
-log_probabilities = [log(comb(n, i)) + i * log(p) + (n - i) * log(1 - p) for i in range(n + 1)]
-
-if (n*p > 1000) & (n*(1-p) > 1000) :
-    def times(n, r) :
-        p = 1
-        for i in range(r+1, n+1) :
-            p *= i
-        return p
-
-    P_x = [(times(n, i)/times(n-i, 0))*p**i*(1-p)**(n-i) for i in range(n+1)]
-    print("\n".join([str(max([sum([P_x[lst[k][0]:lst[k][1]+1][i] >= P_x[lst[k][1]-j] for i in range(lst[k][1]-lst[k][0]+1)])*P_x[lst[k][1]-j] for j in range(lst[k][1]-lst[k][0]+1)])) for k in range(Q)]))
-
-else :
+if (n*p > 5000) and (n*(1-p) > 5000) :
     mu = n*p
     sigma = (n*p*(1-p))**0.5
     for i in range(Q) :
@@ -86,8 +74,48 @@ else :
             print(0.24197072451914337)
             
         elif (a > mu-sigma) and (b >= mu+sigma) :
-            solution = ???
-        
+            solution = (mu + a + ((mu - a)**2 + 4*sigma**2)**0.5)/2
+            
+            if solution <= 2*mu - a :
+                print(norm_pdf(2*mu - a, mu, sigma**2)*2*(mu-a))
+                
+            elif solution >= b :
+                print(norm_pdf(b, mu, sigma**2)*(b-a))
+                
+            else :
+                print(norm_pdf(solution, mu, sigma**2)*(solution-a))
+                
+        ## case 4 : two value inner range
+        elif (a > mu-sigma) and (b < mu + sigma) :
+            if (mu - a) == (b - mu) :
+                print(norm_pdf(a, mu, sigma**2)*(b-a))
+            elif (mu - a) > (b - mu) :
+                solution = (mu + b - ((mu - b)**2 + 4*sigma**2)**0.5)/2
+                
+                if mu - solution < b - mu :
+                    print(norm_pdf(b, mu, sigma**2)*2*(b-mu))
+                    
+                elif solution < a :
+                    print(norm_pdf(a, mu, sigma**2)*(b-a))
+                    
+                elif (solution >= a) and (mu - solution >= b - mu) :
+                    print(norm_pdf(solution, mu, sigma**2)*(b-solution))
+                    
+elif (n*p < 200) & (n*(1-p) < 200) :
+    def times(n, r) :
+        p = 1
+        for i in range(r+1, n+1) :
+            p *= i
+        return p
+
+    P_x = [(times(n, i)/times(n-i, 0))*p**i*(1-p)**(n-i) for i in range(n+1)]
+    print("\n".join([str(max([sum([P_x[lst[k][0]:lst[k][1]+1][i] >= P_x[lst[k][1]-j] for i in range(lst[k][1]-lst[k][0]+1)])*P_x[lst[k][1]-j] for j in range(lst[k][1]-lst[k][0]+1)])) for k in range(Q)]))
+    
+else :
+    log_probabilities = [log(comb(n, i)) + i * log(p) + (n - i) * log(1 - p) for i in range(n + 1)]  ## preventing overflow error
+    
+    log_probabilities == max(log_probabilities)
+    
 
 ## optim for all case : mu+sigma, mu-sigma
 
