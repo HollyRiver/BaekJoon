@@ -43,7 +43,9 @@ lst = [[0]*2]*Q
 for i in range(Q) :
     lst[i] = list(map(int, stdin.readline().split()))
 
-if n < 10000 :
+log_probabilities = [log(comb(n, i)) + i * log(p) + (n - i) * log(1 - p) for i in range(n + 1)]
+
+if (n*p > 1000) & (n*(1-p) > 1000) :
     def times(n, r) :
         p = 1
         for i in range(r+1, n+1) :
@@ -58,11 +60,43 @@ else :
     sigma = (n*p*(1-p))**0.5
     for i in range(Q) :
         a, b = lst[i]
-        ## case 1
-        if (a <= mu+sigma) and (b >= mu + sigma) :
+        ## case 1 : outer range
+        if (a <= mu-sigma) and (b >= mu + sigma) :
             print(0.24197072451914337*2)
             
-        ## case 2
+        ## case 2 : same value
+        elif (a <= mu-sigma) and (b == mu) :
+            print(0.24197072451914337)
+            
+        ## case 3 : one value inner range
+        elif (a <= mu-sigma) and (b < mu + sigma) :
+            solution = (mu + b - ((mu - b)**2 + 4*sigma**2)**0.5)/2
+            
+            if solution >= 2*mu - b :
+                print(norm_pdf(2*mu-b, mu, sigma**2)*2*(b-mu))
+            
+            elif solution <= a :
+                print(norm_pdf(a, mu, sigma**2)*(b-a))
+                
+            else :
+                print(norm_pdf(solution, mu, sigma**2)*(b-solution))
+                
+        ## case 1~3 for a
+        elif (a == mu) and (b >= mu+sigma) :
+            print(0.24197072451914337)
+            
+        elif (a > mu-sigma) and (b >= mu+sigma) :
+            solution = ???
         
 
 ## optim for all case : mu+sigma, mu-sigma
+
+b = mu+sigma-5
+mu
+sigma
+b-mu
+
+norm_pdf(2*mu-b, mu, sigma**2)*2*(b-mu)
+print(0.24197072451914337*2)
+
+## 생각해보니까 이거 안될것같은데, p가 너무 작거나 너무 큰 경우에는 근사가 안됨. 그러면 복잡한 수식을 그대로 돌려야함...
