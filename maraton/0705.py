@@ -184,3 +184,8 @@ for n in range(N) :
             conti = 0
     
     print(score)
+    
+    
+##-----------------
+
+sorted([1,3,2])
