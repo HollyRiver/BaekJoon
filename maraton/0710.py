@@ -135,3 +135,4 @@ def combination(lst, start = 0, ind = 0) :
         temp = lst[i+1:]
         
         combination(temp, i+1, ind+1)
+        
