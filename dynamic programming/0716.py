@@ -29,3 +29,21 @@ elif dpd*((V-B)//dpd)+A > V :
     print((V-B)//dpd)
 else :
     print((V-B)//dpd + 2)
+    
+    
+A, B, V = map(int, input().split())
+
+dpd = A-B
+
+if (V-A)%dpd == 0 :
+    print((V-A)//dpd + 1)
+else :
+    print((V-A)//dpd + 2)
+    
+##-----------------------------------
+
+N = int(input())
+
+output = "SciComLove\n"*N
+
+print(output[:-1])

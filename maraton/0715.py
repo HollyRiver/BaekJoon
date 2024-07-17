@@ -84,3 +84,45 @@ for i in range(len_m) :
 
 print(maximum_common)
 print(minimum_common)
+
+
+##-------------------
+
+from sys import stdin
+
+T = int(stdin.readline().rstrip())
+
+fst_floor = [0]*14
+snd_floor = [0]*14
+
+residents_lst = [[0,0]]*T
+
+for t in range(T) :
+    residents_lst[t] = [int(stdin.readline().rstrip()), int(stdin.readline().rstrip())]
+
+residents_lst.sort()
+switch = False
+residents = 0
+k = 0
+n = 0
+
+for t in range(T) :
+    k_ = k
+    n_ = n
+    k, n = residents_lst[t]
+    
+    if k_ != k :
+        if switch :
+            fst_floor = [0]*14
+        else :
+            snd_floor = [0]*14
+        switch = not switch
+    
+    if k == 1 :
+        residents = (n+1)*n/2
+        print(residents)
+        zero_default[n] = residents
+    else :
+        residents = sum(zero_default[:n])
+        print(residents)
+        pre_residents[n] = residents
