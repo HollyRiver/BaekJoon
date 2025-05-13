@@ -29,8 +29,8 @@ if mu%1 > 0.0 :
 else :
     max_quantile = int(mu) ## 동일한 경우에도 더 작은 x값을 max_quantile로 사용함
 
-minimum_value = max([0, max_quantile - 1200])
-maximum_value = min([n+1, max_quantile + 1200])
+minimum_value = max([0, max_quantile - 1100])
+maximum_value = min([n+1, max_quantile + 1100])
 searching_len = maximum_value - minimum_value ## O(n**2) 탐색, n은 최대가 2400
 
 ## 미리 최대 2400개의 확률값을 계산
@@ -131,19 +131,22 @@ for i in range(searching_len) :
                 fromi_toj_pdf.append(log_binom_pdf[i+j]) ## 한 번 sorting해놓고, 추가한 뒤 재정렬
                 fromi_toj_pdf.sort(reverse=True)
                 
-                ## 가용범위에서 최대값을 찾음. 시간복잡도를 결정짓는 부분. width를 지정하고 앞뒤로 탐색하면 중복 탐색을 막을 수 있음 -> 조금 생각이 필요함
+                ## 가용범위에서 최대값을 찾음. 시간복잡도를 결정짓는 부분. 지난번의 인덱스를 기억해두고, 그거부터 시작하도록 하면 되겠지
                 local_max = -1e8
                 end_stack = 0
+                start = 0
                 
-                for k, log_px in enumerate(fromi_toj_pdf) :
-                    local_current = log_px + log(k+1)
+                for k in range(max(0, start-1), len(fromi_toj_pdf)) :
+                    local_current = fromi_toj_pdf[k] + log(k+1)
                     
                     if local_current >= local_max :
                         local_max = local_current
                         end_stack = 0
+                        start = k
+                        
                     else :
                         end_stack += 1
-                                           
+
                         if end_stack >= 2 :
                             break
                     
