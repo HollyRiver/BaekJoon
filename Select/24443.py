@@ -32,9 +32,10 @@ for _ in range(Q) :
                         B[l] = Bm
                     l += 1
             
-            B[b] = B[l]
-            B[l] = Bp ## B[b]
-            
+            if l != b :
+                B[b] = B[l]
+                B[l] = Bp ## B[b]
+                
             if l == k :
                 break
             elif l > k :
